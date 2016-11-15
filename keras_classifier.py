@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[9]:
+# In[55]:
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
@@ -12,6 +12,7 @@ from keras.optimizers import SGD, rmsprop
 
 import os;
 import os.path;
+from os.path import expanduser;
 import pickle;
 
 
