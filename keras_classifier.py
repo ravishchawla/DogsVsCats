@@ -15,9 +15,10 @@ import os.path;
 import pickle;
 
 
-# In[27]:
+# In[49]:
 
-files_data_dir = "/Users/ravishchawla/workspace/machinelearning/datasets/dogs_vs_cats/";
+home = expanduser("~");
+files_data_dir = home + "/workspace/machinelearning/datasets/dogs_vs_cats/";
 
 train_data_dir = files_data_dir + "train/";
 test_data_dir = files_data_dir + "test/";
@@ -30,7 +31,7 @@ num_test_samples = 2048;
 num_epoch = 50;
 
 
-# In[35]:
+# In[50]:
 
 num_filters = {
     'wc1' : 32,
@@ -87,7 +88,7 @@ dropout_ratio = {
 init_type = 'glorot_normal';
 
 
-# In[37]:
+# In[51]:
 
 model = Sequential();
 
@@ -158,7 +159,7 @@ act4 = Activation(activation_type['fc2']);
 model.add(act4);
 
 
-# In[38]:
+# In[52]:
 
 img_width = 250;
 img_height = 250;
@@ -188,7 +189,7 @@ data_zoom_range = 0.2;
 data_horizontal_flip = True;
 
 
-# In[39]:
+# In[53]:
 
 #opt = SGD(lr=learning_rate, decay=decay_rate);
 opt = 'adadelta';
@@ -204,7 +205,7 @@ train_datagen = ImageDataGenerator(rescale = data_rescale_ratio, shear_range=dat
 test_datagen = ImageDataGenerator(rescale = data_rescale_ratio);
 
 
-# In[40]:
+# In[54]:
 
 train_generator = train_datagen.flow_from_directory(train_data_dir, target_size=(img_width, img_height), batch_size=data_batch_size, class_mode=data_class_mode);
 
