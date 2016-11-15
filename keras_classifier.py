@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[55]:
+# In[56]:
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
@@ -9,6 +9,8 @@ from keras.layers import Convolution2D, MaxPooling2D
 from keras.layers import Activation, Dropout, Flatten, Dense
 
 from keras.optimizers import SGD, rmsprop
+
+import datetime;
 
 import os;
 import os.path;
@@ -216,6 +218,11 @@ test_generator = test_datagen.flow_from_directory(test_data_dir, target_size=(im
 # In[41]:
 
 model.fit_generator(train_generator, samples_per_epoch=num_train_samples, nb_epoch=num_epoch, validation_data=test_generator, nb_val_samples=num_test_samples);
+
+
+# In[62]:
+
+model.save_weights(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"));
 
 
 # In[ ]:
