@@ -1,0 +1,4 @@
+model_checkpoint_path: "model_cat_dog_6_final.tflearn"
+all_model_checkpoint_paths: "model_cat_dog_6.tflearn-3564"
+all_model_checkpoint_paths: "model_cat_dog_6.tflearn-3600"
+all_model_checkpoint_paths: "model_cat_dog_6_final.tflearn"
