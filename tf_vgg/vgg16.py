@@ -9,7 +9,6 @@ import time
 
 VGG_MEAN = [103.939, 116.779, 123.68]
 
-
 class Vgg16:
     def __init__(self, vgg16_npy_path=None):
         if vgg16_npy_path is None:
@@ -19,8 +18,15 @@ class Vgg16:
             vgg16_npy_path = path
             print(path);
 
-        self.data_dict = np.load(vgg16_npy_path, encoding='latin1').item()
-        print("npy file loaded")
+        self.data_dict = np.load(vgg16_npy_path, encoding='latin1').item();
+
+        self.fc_dict = {'fc6' : 512, 'fc8' : 2};
+
+        print("npy filer loaded")
+        #images = tf.placeholder("float", [2, 224, 224, 3]);
+
+
+        #self.build(images);
 
     def build(self, rgb):
         """
@@ -68,6 +74,8 @@ class Vgg16:
         self.conv5_3 = self.conv_layer(self.conv5_2, "conv5_3")
         self.pool5 = self.max_pool(self.conv5_3, 'pool5')
 
+        '''
+        #original FC Layers
         self.fc6 = self.fc_layer(self.pool5, "fc6")
         assert self.fc6.get_shape().as_list()[1:] == [4096]
         self.relu6 = tf.nn.relu(self.fc6)
@@ -78,6 +86,18 @@ class Vgg16:
         self.fc8 = self.fc_layer(self.relu7, "fc8")
 
         self.prob = tf.nn.softmax(self.fc8, name="prob")
+        '''
+
+        self.fc6 = self.custom_fc_layer(self.pool5, "fc6");
+        assert self.fc6.get_shape().as_list()[1:] == [512];
+        self.relu6 = tf.nn.relu(self.fc6);
+
+        self.dp7 = tf.nn.dropout(self.relu6, tf.constant(0.5), name="dp7");
+
+        self.fc8 = self.custom_fc_layer(self.dp7, "fc8");
+
+        self.prob = tf.nn.softmax(self.fc8, name="prob");
+
 
         self.data_dict = None
         print("build model finished: %ds" % (time.time() - start_time))
@@ -117,6 +137,22 @@ class Vgg16:
 
             return fc
 
+    def custom_fc_layer(self, bottom, name):
+        with tf.variable_scope(name):
+            shape = bottom.get_shape().as_list()
+            dim = 1
+            for d in shape[1:]:
+                dim *= d
+            x = tf.reshape(bottom, [-1, dim])
+            
+            weights = self.get_rand_fc_weight(dim, name);
+            biases = self.get_rand_fc_bias(name);
+
+            fc = tf.nn.bias_add(tf.matmul(x, weights), biases);
+
+        return fc;
+
+
     def get_conv_filter(self, name):
         return tf.constant(self.data_dict[name][0], name="filter")
 
@@ -125,3 +161,15 @@ class Vgg16:
 
     def get_fc_weight(self, name):
         return tf.constant(self.data_dict[name][0], name="weights")
+
+    def get_rand_fc_weight(self, base, name):
+        origin_weights = tf.Variable(tf.random_normal([base, self.fc_dict[name]]));
+        print(origin_weights.get_shape());
+        return origin_weights;
+
+    def get_rand_fc_bias(self, name):
+        origin_bias = tf.Variable(tf.random_normal([self.fc_dict[name]]));
+        return origin_bias;
+
+if __name__ == "__main__":
+    Vgg16();
