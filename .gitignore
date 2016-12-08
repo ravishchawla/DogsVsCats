@@ -4,6 +4,7 @@
 *.backup2
 *.arff
 datafiles/
+tensorboard/
 deprecated
 *.npy
 *.pyc
