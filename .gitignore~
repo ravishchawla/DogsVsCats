@@ -1,0 +1,13 @@
+*.csv
+*.dat
+*backup
+*.backup2
+*.arff
+datafiles/
+deprecated
+*.npy
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class%
+*.data
